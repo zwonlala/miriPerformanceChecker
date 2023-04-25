@@ -1,0 +1,11 @@
+{
+  "name": "miriperformancechecker",
+  "version": "1.0.0",
+  "description": "performance checker of \"www.miricanvas.com\" using Chrome Lighthouse",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zwonlala",
+  "license": "ISC"
+}
