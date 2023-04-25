@@ -11,7 +11,7 @@ const options = {
   onlyCategories: ["performance"],
   port: chrome.port,
 };
-const runnerResult = await lighthouse("https://www.miricanvas.com/", options);
+const runnerResult = await lighthouse("https://local.miricanvas.com/", options);
 
 // `.report` is the HTML report as a string
 const reportHtml = runnerResult.report;
