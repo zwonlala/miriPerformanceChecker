@@ -2,19 +2,10 @@
 import fs from "fs";
 import lighthouse from "lighthouse";
 import chromeLauncher from "chrome-launcher";
+import url from "./url.json" assert { type: "json" };
 
-const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
-
-const options = {
-  logLevel: "info",
-  output: "json",
-  onlyCategories: ["performance"],
-  port: chrome.port,
-};
-const runnerResult = await lighthouse("https://local.miricanvas.com/", options);
-
-// `.report` is the HTML report as a string
-const reportJson = runnerResult.report;
+const urlData = JSON.parse(JSON.stringify(url));
+const urls = Object.keys(urlData);
 
 const currentDate = new Date();
 const dateOption = {
@@ -27,19 +18,40 @@ const dateOption = {
 // "YY/MM/DD HH:MM" format
 const dateString = Intl.DateTimeFormat("ja", dateOption).format(currentDate);
 const [YYMMDD, HHMM] = dateString.split(" ");
-const dir = `./${YYMMDD.replace(/\//g, "")}`;
-const fileDatePrefix = HHMM.replace(":", "");
+
+const dayDir = YYMMDD.replace(/\//g, "");
+const dateDir = HHMM.replace(":", "");
+const dir = `./report/${dayDir}/${dateDir}/`;
 
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
-fs.writeFileSync(`${dir}/${fileDatePrefix}_report.json`, reportJson);
-// `.lhr` is the Lighthouse Result as a JS object
-console.log("Report is done for", runnerResult.lhr.finalDisplayedUrl);
-console.log(
-  "Performance score was",
-  runnerResult.lhr.categories.performance.score * 100
-);
+const reportUrlPerformance = async (url) => {
+  const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
 
-await chrome.kill();
+  const options = {
+    logLevel: "info",
+    output: "json",
+    onlyCategories: ["performance"],
+    port: chrome.port,
+  };
+
+  const runnerResult = await lighthouse(url, options);
+  // `.report` is the HTML report as a string
+  const reportJson = runnerResult.report;
+
+  fs.writeFileSync(`${dir}/${urlData[url]}.json`, reportJson);
+  // `.lhr` is the Lighthouse Result as a JS object
+  console.log("Report is done for", runnerResult.lhr.finalDisplayedUrl);
+  console.log(
+    "Performance score was",
+    runnerResult.lhr.categories.performance.score * 100
+  );
+
+  await chrome.kill();
+};
+
+for (let i = 0; i < urls.length; i++) {
+  await reportUrlPerformance(urls[i]);
+}

@@ -1,0 +1,10 @@
+{
+  "https://www.miricanvas.com/ko": "MAIN",
+  "https://www.miricanvas.com/en": "MAIN_GLOBAL",
+  "https://www.miricanvas.com/ko/templates": "TEMPLATE",
+  "https://www.miricanvas.com/en/templates": "TEMPLATE_GLOBAL",
+  "https://local.miricanvas.com/ko": "MAIN_LOCAL",
+  "https://local.miricanvas.com/en": "MAIN_GLOBAL_LOCAL",
+  "https://local.miricanvas.com/ko/templates": "TEMPLATE_LOCAL",
+  "https://local.miricanvas.com/en/templates": "TEMPLATE_GLOBAL_LOCAL"
+}
